@@ -1,22 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:map_bloc/screen/gps_access_screen.dart';
 
-void main() => runApp(const MyApp());
+void main() => runApp(const MappApp());
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MappApp extends StatelessWidget {
+  const MappApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Material App',
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Material App Bar'),
-        ),
-        body: const Center(
-          child: Text('Hello World'),
-        ),
-      ),
+      home:  GpsAccessScreen()
     );
   }
 }
