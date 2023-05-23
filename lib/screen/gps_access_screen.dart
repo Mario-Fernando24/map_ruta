@@ -7,14 +7,14 @@ class GpsAccessScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Scaffold(
        body: Center(
-        child: _aceessBotton()
+        child: _aceessButton()
        ),
     );
   }
 }
 
-class _aceessBotton extends StatelessWidget {
-  const _aceessBotton({
+class _aceessButton extends StatelessWidget {
+  const _aceessButton({
     Key? key,
   }) : super(key: key);
 
