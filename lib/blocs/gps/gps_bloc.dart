@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:geolocator/geolocator.dart';
@@ -6,6 +8,9 @@ part 'gps_event.dart';
 part 'gps_state.dart';
 
 class GpsBloc extends Bloc<GpsEvent, GpsState> {
+
+ StreamSubscription? gpsSubcription;
+
   GpsBloc() : super(const GpsState(isGpsEnable: false, isGpsPermission: false)) {
 
     on<GpsAndPermissionEvent>((event, emit) {
@@ -22,11 +27,11 @@ class GpsBloc extends Bloc<GpsEvent, GpsState> {
   //INICIALIZAR EL STRING DE INFORMACION (SABER SI EL GPS ESTA ACTIVO O NO LISTENER)
   Future<void> _init() async{
     //estara escuchando el gps y verifico el estado de los privilegios
-    
     final isEnable = await _checkGpsStatus();
-       print('*******************************************************');
-       print('${isEnable}');
-       print('*******************************************************');
+    add(GpsAndPermissionEvent(
+      isGpsEnable: isEnable,
+       isGpsPermission: state.isGpsPermission));
+    
     
   }
 
@@ -34,10 +39,12 @@ class GpsBloc extends Bloc<GpsEvent, GpsState> {
     //para saber si el permiso del gps esta habilitado
      final isEnable = await Geolocator.isLocationServiceEnabled();
 
-     Geolocator.getServiceStatusStream().listen((event) {
+    gpsSubcription = Geolocator.getServiceStatusStream().listen((event) {
       //1 si esta habilitado 0 si no esta
       final isEnable = (event.index==1) ? true : false;
-      print('=====>${isEnable}');
+       add(GpsAndPermissionEvent(
+       isGpsEnable: isEnable,
+       isGpsPermission: state.isGpsPermission));
 
      });
      return isEnable;
@@ -47,7 +54,7 @@ class GpsBloc extends Bloc<GpsEvent, GpsState> {
 
   @override
   Future<void> close() {
-    // TODO: implement close
+    gpsSubcription?.cancel();
     return super.close();
   }
 }
