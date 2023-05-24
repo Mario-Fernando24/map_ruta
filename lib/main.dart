@@ -10,7 +10,8 @@ void main() {
     //observe cuando exista algun cambio de gps en la app
     MultiBlocProvider(
       providers: [
-      BlocProvider(create: (context) => GpsBloc() )
+      BlocProvider(create: (context) => GpsBloc() ),
+      BlocProvider(create: (context) => LocationBloc() )
       ],
       child: const MappApp(),
     )
