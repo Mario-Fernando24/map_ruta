@@ -1,7 +1,20 @@
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:map_bloc/blocs/blocs.dart';
 import 'package:map_bloc/screen/gps_access_screen.dart';
 
-void main() => runApp(const MappApp());
+void main() {
+  runApp( 
+    //observe cuando exista algun cambio de gps en la app
+    MultiBlocProvider(
+      providers: [
+      BlocProvider(create: (context) => GpsBloc() )
+      ],
+      child: const MappApp(),
+    )
+  );
+}
 
 class MappApp extends StatelessWidget {
   const MappApp({super.key});
