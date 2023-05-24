@@ -39,7 +39,9 @@ class _aceessButton extends StatelessWidget {
           elevation: 0,
           splashColor: Colors.transparent,
           onPressed: (){
+              final gpsBloc = context.read<GpsBloc>();
 
+              gpsBloc.askGpsAccess(); 
           }
         )
       ],

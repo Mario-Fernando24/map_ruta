@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 part 'gps_event.dart';
 part 'gps_state.dart';
@@ -26,13 +27,27 @@ class GpsBloc extends Bloc<GpsEvent, GpsState> {
 
   //INICIALIZAR EL STRING DE INFORMACION (SABER SI EL GPS ESTA ACTIVO O NO LISTENER)
   Future<void> _init() async{
-    //estara escuchando el gps y verifico el estado de los privilegios
-    final isEnable = await _checkGpsStatus();
+
+
+    final gpsInitStatus = await Future.wait([
+      _checkGpsStatus(),
+      _isPermisssionGranted()
+    ]);
+
+    
     add(GpsAndPermissionEvent(
-      isGpsEnable: isEnable,
-       isGpsPermission: state.isGpsPermission));
+      isGpsEnable: gpsInitStatus[0],
+       isGpsPermission: gpsInitStatus[1]));
     
     
+  }
+
+
+   Future<bool> _isPermisssionGranted() async {
+    
+    final isGranted = await Permission.location.isGranted;
+    return isGranted;
+
   }
 
   Future<bool> _checkGpsStatus() async{
@@ -49,6 +64,27 @@ class GpsBloc extends Bloc<GpsEvent, GpsState> {
      });
      return isEnable;
   }
+
+  Future<void> askGpsAccess() async {
+     
+     final status = await Permission.location.request();
+
+     switch (status) {
+       case PermissionStatus.granted:
+          add(GpsAndPermissionEvent(isGpsEnable: state.isGpsEnable, isGpsPermission: true));
+         break;
+
+       case PermissionStatus.denied:
+       case PermissionStatus.restricted:
+       case PermissionStatus.limited:
+       case PermissionStatus.permanentlyDenied:
+           add(GpsAndPermissionEvent(isGpsEnable: state.isGpsEnable, isGpsPermission: false));
+        openAppSettings();
+     }
+
+  }
+
+ 
 
   //se llama cuando el bloc ya no se utilizara
 
