@@ -19,7 +19,7 @@ class GpsBloc extends Bloc<GpsEvent, GpsState> {
         isGpsEnable: event.isGpsEnable,
         isGpsPermission: event.isGpsPermission
         ));
-   });
+      });
 
     _init();
 
@@ -51,7 +51,7 @@ class GpsBloc extends Bloc<GpsEvent, GpsState> {
   }
 
   Future<bool> _checkGpsStatus() async{
-    //para saber si el permiso del gps esta habilitado
+     //para saber si el permiso del gps esta habilitado
      final isEnable = await Geolocator.isLocationServiceEnabled();
 
     gpsSubcription = Geolocator.getServiceStatusStream().listen((event) {
@@ -64,6 +64,9 @@ class GpsBloc extends Bloc<GpsEvent, GpsState> {
      });
      return isEnable;
   }
+
+
+  //para pedirle acceso al gps
 
   Future<void> askGpsAccess() async {
      

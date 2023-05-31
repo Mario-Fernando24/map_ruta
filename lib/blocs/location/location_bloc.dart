@@ -19,6 +19,20 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
         myLocationHistory: [...state.myLocationHistory, event.newLocation]
        ));
     });
+
+    on<OnStarSeguirUsers>((event, emit){
+       emit(state.copyWith(
+          seguirUsers: true
+       ));
+    });
+
+    on<OnStopSeguirUsers>((event, emit){
+       emit(state.copyWith(
+        seguirUsers: false
+       ));
+    });
+
+    
   }
 
   Future getCurrentPosition()async{
@@ -30,12 +44,14 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
    
   //para empezarle darle seguimiento al usuario
   void starSeguimientoUsers() {
+
+    add(OnStarSeguirUsers());
      
      //escuchar cualquier cambio de la ubicacion
     positionStream = Geolocator.getPositionStream().listen((event) { 
         final positionn =event;
 
-        print('listen==> ${positionn}');
+        print('listen seguimiento de la posición actual ==>  ${positionn}');
         add(GetNewLocation(LatLng(positionn.latitude, positionn.longitude)));
      });
   }
@@ -45,6 +61,7 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
 
     print('SE CANCELO LA SUBCRIPCIÓN');
     positionStream?.cancel();
+    add(OnStopSeguirUsers());
 
   }
 

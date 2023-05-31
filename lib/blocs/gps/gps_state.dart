@@ -5,7 +5,7 @@ part of 'gps_bloc.dart';
   final bool isGpsEnable;
   final bool isGpsPermission;
 
-  bool get isAllGranted => isGpsEnable && isGpsPermission;
+  bool get isAllGranted => isGpsEnable==true && isGpsPermission==true;
 
   const GpsState({
    required this.isGpsEnable,

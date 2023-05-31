@@ -16,3 +16,13 @@ class GetNewLocation extends LocationEvent {
 
 }
 
+//disparar el evento
+class OnStarSeguirUsers extends LocationEvent{
+
+}
+
+
+class OnStopSeguirUsers extends LocationEvent{
+
+}
+

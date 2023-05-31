@@ -40,7 +40,7 @@ class _aceessButton extends StatelessWidget {
           splashColor: Colors.transparent,
           onPressed: (){
               final gpsBloc = context.read<GpsBloc>();
-
+              //activar gps cuando presiono el botton 
               gpsBloc.askGpsAccess(); 
           }
         )
