@@ -50,7 +50,7 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
      //escuchar cualquier cambio de la ubicacion
     positionStream = Geolocator.getPositionStream().listen((event) { 
         final positionn =event;
-
+       //esta emitiendo la ubicacion 
         print('listen seguimiento de la posición actual ==>  ${positionn}');
         add(GetNewLocation(LatLng(positionn.latitude, positionn.longitude)));
      });

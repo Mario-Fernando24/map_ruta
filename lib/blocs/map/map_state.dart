@@ -5,11 +5,11 @@ part of 'map_bloc.dart';
   //si el mapa esta inicializado
   final bool isMapInitialized;
   //si la persona quiere seguir la ubicacion del usuario
-  final seguirUbicacionUsers;
+  final bool seguirUbicacionUsers;
 
   MapState({
     this.isMapInitialized = false,
-    this.seguirUbicacionUsers = false
+    this.seguirUbicacionUsers = true
     });
   
   MapState copyWith({
@@ -18,7 +18,7 @@ part of 'map_bloc.dart';
   })=> MapState(
     //inicializarlos
     isMapInitialized: isMapInitialized ?? this.isMapInitialized,
-    seguirUbicacionUsers: seguirUbicacionUsers ?? seguirUbicacionUsers
+    seguirUbicacionUsers: seguirUbicacionUsers ?? this.seguirUbicacionUsers
   );
 
     @override

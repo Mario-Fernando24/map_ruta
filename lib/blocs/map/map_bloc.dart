@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:map_bloc/blocs/blocs.dart';
 import 'package:map_bloc/themes/uber.dart';
 
 part 'map_event.dart';
@@ -10,10 +11,24 @@ part 'map_state.dart';
 
 class MapBloc extends Bloc<MapEvent, MapState> {
 
+  //relacion de una dependencia ya que necesito acceder a la localizacion en tiemoo real que esta en ese bloc
+  final LocationBloc locationBloc;
+
   GoogleMapController? _mapController;
 
-  MapBloc() : super( MapState()) {
+  MapBloc({
+    required this.locationBloc
+  }) : super( MapState()) {
     on<OnMapInitialzedEvent>(_onInitMap);
+
+   
+    locationBloc.stream.listen((locationSatate) {
+       //si necesito mover la camara
+       if(!state.seguirUbicacionUsers) return;
+       if(locationSatate.latLngPosition==null) return;
+
+       moveCamera(locationSatate.latLngPosition!);
+    });
   }
 
 
