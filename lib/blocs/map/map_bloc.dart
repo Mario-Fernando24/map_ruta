@@ -19,14 +19,28 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   MapBloc({
     required this.locationBloc
   }) : super( MapState()) {
+    
     on<OnMapInitialzedEvent>(_onInitMap);
+
+    on<OnStopSeguirUsersEvent>((event, emit) => {
+          emit(state.copyWith(
+            seguirUbicacionUsers: false
+          ))
+    });
+
+    on<OnStartSeguirUsersEvent>((event, emit) => {
+          emit(state.copyWith(
+            seguirUbicacionUsers: true
+          ))
+    });
 
    
     locationBloc.stream.listen((locationSatate) {
-       //si necesito mover la camara
+       //si seguir usuario esta en false que no se mueva la camara
        if(!state.seguirUbicacionUsers) return;
+       //si las coordenadas que esta enviando es null que no se mueva
        if(locationSatate.latLngPosition==null) return;
-
+        //si no que envie las coordenadas  que esta pasando del bloc location
        moveCamera(locationSatate.latLngPosition!);
     });
   }
@@ -43,4 +57,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
         final cameraUpdate = CameraUpdate.newLatLng(newLocation);
         _mapController?.animateCamera(cameraUpdate);
   }
+
+
+
 }
